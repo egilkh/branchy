@@ -1,0 +1,26 @@
+{
+  "name": "branchy",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./bin/branchy.js",
+  "bin": {
+    "branchy": "./bin/branchy.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "watch": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/branchy.ts"
+  },
+  "author": "egilkh",
+  "license": "MIT",
+  "dependencies": {
+    "inquirer": "^7.3.3"
+  },
+  "devDependencies": {
+    "@types/inquirer": "^7.3.1",
+    "@types/node": "^14.14.39",
+    "nodemon": "^2.0.7",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.4"
+  }
+}
