@@ -153,10 +153,12 @@ const deleteOneLocalBranch = async (branch: string, whatD: string): Promise<Dele
       success: true,
     };
   } catch (err) {
+    const error = err instanceof Error ? err : new Error('Unknown error');
+
     return {
       branch,
       success: false,
-      err,
+      err: error.message,
     }
   }
 };
@@ -169,10 +171,12 @@ const deleteOneRemoteBranch = async (branch: string, remote: string): Promise<De
       success: true,
     };
   } catch (err) {
+    const error = err instanceof Error ? err : new Error('Unknown error');
+
     return {
       branch,
       success: false,
-      err,
+      err: error.message,
     }
   }
 };
@@ -198,7 +202,6 @@ const confirmDirectory = async () : Promise<boolean> => {
   });
 
   if (!answer?.confirm) {
-
     return false;
   }
 

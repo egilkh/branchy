@@ -36,10 +36,14 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __spreadArray = (this && this.__spreadArray) || function (to, from) {
-    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
-        to[j] = from[i];
-    return to;
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var inquirer_1 = require("inquirer");
@@ -88,7 +92,7 @@ var pickBranches = function () { return __awaiter(void 0, void 0, void 0, functi
             case 0: return [4 /*yield*/, fetchBranches()];
             case 1:
                 choices = _b.sent();
-                return [4 /*yield*/, inquirer_1.prompt({
+                return [4 /*yield*/, (0, inquirer_1.prompt)({
                         type: 'checkbox',
                         name: 'branches',
                         message: 'Branches?',
@@ -118,7 +122,7 @@ var pickRemotes = function () { return __awaiter(void 0, void 0, void 0, functio
                     .map(function (name) { return ({
                     name: name,
                 }); });
-                return [4 /*yield*/, inquirer_1.prompt({
+                return [4 /*yield*/, (0, inquirer_1.prompt)({
                         type: 'checkbox',
                         name: 'remotes',
                         message: 'Remotes?',
@@ -139,7 +143,7 @@ var hardOrSoftDelete = function () { return __awaiter(void 0, void 0, void 0, fu
     var answer;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, inquirer_1.prompt({
+            case 0: return [4 /*yield*/, (0, inquirer_1.prompt)({
                     type: 'list',
                     name: 'hardorsoft',
                     message: '-d or -D',
@@ -169,7 +173,7 @@ var hardOrSoftDelete = function () { return __awaiter(void 0, void 0, void 0, fu
 }); };
 var cmdRunner = function (cmd, params) {
     return new Promise(function (resolve, reject) {
-        var run = child_process_1.spawn(cmd, params);
+        var run = (0, child_process_1.spawn)(cmd, params);
         var out = '';
         var err = '';
         run.stdout.on('data', function (data) {
@@ -187,7 +191,7 @@ var cmdRunner = function (cmd, params) {
     });
 };
 var deleteOneLocalBranch = function (branch, whatD) { return __awaiter(void 0, void 0, void 0, function () {
-    var err_1;
+    var err_1, error;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -201,17 +205,18 @@ var deleteOneLocalBranch = function (branch, whatD) { return __awaiter(void 0, v
                     }];
             case 2:
                 err_1 = _a.sent();
+                error = err_1 instanceof Error ? err_1 : new Error('Unknown error');
                 return [2 /*return*/, {
                         branch: branch,
                         success: false,
-                        err: err_1,
+                        err: error.message,
                     }];
             case 3: return [2 /*return*/];
         }
     });
 }); };
 var deleteOneRemoteBranch = function (branch, remote) { return __awaiter(void 0, void 0, void 0, function () {
-    var err_2;
+    var err_2, error;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -225,10 +230,11 @@ var deleteOneRemoteBranch = function (branch, remote) { return __awaiter(void 0,
                     }];
             case 2:
                 err_2 = _a.sent();
+                error = err_2 instanceof Error ? err_2 : new Error('Unknown error');
                 return [2 /*return*/, {
                         branch: branch,
                         success: false,
-                        err: err_2,
+                        err: error.message,
                     }];
             case 3: return [2 /*return*/];
         }
@@ -242,7 +248,7 @@ var deleteOneBranch = function (branch, deleteType, remotes) {
             switch (_b.label) {
                 case 0: return [4 /*yield*/, Promise.all(__spreadArray([
                         deleteOneLocalBranch(branch, deleteType)
-                    ], remotes.map(function (r) { return deleteOneRemoteBranch(branch, r); })))];
+                    ], remotes.map(function (r) { return deleteOneRemoteBranch(branch, r); }), true))];
                 case 1:
                     _a = _b.sent(), local = _a[0], remote = _a[1];
                     return [2 /*return*/, { local: local, remote: remote }];
@@ -258,7 +264,7 @@ var confirmDirectory = function () { return __awaiter(void 0, void 0, void 0, fu
     var answer;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, inquirer_1.prompt({
+            case 0: return [4 /*yield*/, (0, inquirer_1.prompt)({
                     type: 'confirm',
                     name: 'confirm',
                     message: "Are you sure you want to delete branches in " + process.env.PWD,
