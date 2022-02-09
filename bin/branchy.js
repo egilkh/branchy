@@ -56,7 +56,10 @@ var DeleteType;
 })(DeleteType || (DeleteType = {}));
 ;
 var excludedBranches = [
-    'master', 'staging', 'development', 'main',
+    'master',
+    'staging',
+    'development',
+    'main',
 ];
 var isExcludedBranch = function (branch) {
     return excludedBranches.includes(branch);
@@ -145,7 +148,7 @@ var hardOrSoftDelete = function () { return __awaiter(void 0, void 0, void 0, fu
         switch (_a.label) {
             case 0: return [4 /*yield*/, (0, inquirer_1.prompt)({
                     type: 'list',
-                    name: 'hardorsoft',
+                    name: 'hardOrSoft',
                     message: '-d or -D',
                     choices: [{
                             name: '-d',
@@ -164,10 +167,10 @@ var hardOrSoftDelete = function () { return __awaiter(void 0, void 0, void 0, fu
                 })];
             case 1:
                 answer = _a.sent();
-                if (answer.hardorsoft === 'abort') {
+                if (answer.hardOrSoft === 'abort') {
                     return [2 /*return*/, DeleteType.Abort];
                 }
-                return [2 /*return*/, answer.hardorsoft === 'hard' ? DeleteType.Hard : DeleteType.Soft];
+                return [2 /*return*/, answer.hardOrSoft === 'hard' ? DeleteType.Hard : DeleteType.Soft];
         }
     });
 }); };
@@ -321,7 +324,7 @@ var main = function () { return __awaiter(void 0, void 0, void 0, function () {
         }
     });
 }); };
-cmdRunner('command', ['-v', 'git'])
+cmdRunner('git', ['--version'])
     .then(function (_) {
     return main();
 })

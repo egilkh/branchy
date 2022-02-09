@@ -15,7 +15,10 @@ type BranchChoice = {
 }
 
 const excludedBranches = [
-  'master', 'staging', 'development', 'main',
+  'master',
+  'staging',
+  'development',
+  'main',
 ];
 
 const isExcludedBranch = (branch: string) => {
@@ -88,7 +91,7 @@ const pickRemotes = async (): Promise<string[]> => {
 const hardOrSoftDelete = async () => {
   const answer = await prompt({
     type: 'list',
-    name: 'hardorsoft',
+    name: 'hardOrSoft',
     message: '-d or -D',
     choices: [{
       name: '-d',
@@ -106,11 +109,11 @@ const hardOrSoftDelete = async () => {
     pageSize: getPagesize(),
   });
 
-  if (answer.hardorsoft === 'abort') {
+  if (answer.hardOrSoft === 'abort') {
     return DeleteType.Abort;
   }
 
-  return answer.hardorsoft === 'hard' ? DeleteType.Hard : DeleteType.Soft
+  return answer.hardOrSoft === 'hard' ? DeleteType.Hard : DeleteType.Soft
 };
 
 const cmdRunner = (cmd: string, params: string[]) : Promise<{ code: number, out: string, err: string }> => {
@@ -246,7 +249,7 @@ const main = async () => {
   console.log(`Failed ${failedRemote.length} remote branches, ${failedRemote.map(l => l.branch).join(', ')}`);
 };
 
-cmdRunner('command', ['-v', 'git'])
+cmdRunner('git', ['--version'])
 .then(_ => {
   return main();
 })
